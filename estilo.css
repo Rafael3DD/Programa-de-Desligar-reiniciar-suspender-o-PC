@@ -1,0 +1,30 @@
+body{
+    background: #00BFFF;
+}
+h1{
+    color: white;
+    text-align: center;
+}
+#down{
+    color:white;
+    font-size :25px;
+   
+}
+a{
+    color:black;
+ 
+}
+footer{
+    text-align: center;
+    font: normal 15pt italic;
+    
+}
+
+section{
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    width: auto;
+    margin:auto;
+    box-shadow:3px 3px 10px rgba(0,0,0,0.363); ;
+}
