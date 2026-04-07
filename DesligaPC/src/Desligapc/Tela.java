@@ -30,6 +30,7 @@ import javax.swing.UIManager;
 public class Tela extends javax.swing.JFrame implements Runnable{
     Thread t = new Thread(this);
     Thread acao;
+    private volatile boolean cancelado = false;
     private static String hora3;
     private static String minutos3;
     private static String segundos3;
@@ -298,82 +299,66 @@ public class Tela extends javax.swing.JFrame implements Runnable{
 
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       
         hora.setEnabled(false);
         minuto.setEnabled(false);
         segundos.setEnabled(false);
-        
         jComboFuncao.setEnabled(false);
         jButton2.setEnabled(false);
         jButton3.setEnabled(true);
+        
         int horr = Integer.parseInt(hora.getValue().toString());
-        int segg = Integer.parseInt(segundos.getValue().toString());
         int minn = Integer.parseInt(minuto.getValue().toString());
+        int segg = Integer.parseInt(segundos.getValue().toString());
+        
+        
         if(horr ==0 && segg == 0 && minn == 0){
             jButton2.setEnabled(true);
-        }else{
+            return;
+        }
+            
+        cancelado = false;
         
         acao = new Thread(new Runnable() {
             @Override
             public void run() {
+                try {
+                   robot = new Robot();
+                } catch (AWTException e) {
+                   e.printStackTrace();
+                }
+                
                 TimeZone.setDefault(TimeZone.getTimeZone("GMT-03:00"));
                 String hor = (String) hora.getValue().toString();
-                String seg = (String) segundos.getValue().toString();
                 String min = (String) minuto.getValue().toString();
-                
-                try {
-                    robot = new Robot();
-                    
-                } catch (AWTException e) {
-                    e.printStackTrace();
-                }
-                
-                //por hora
-                float horas2 = Float.parseFloat(hor);
-                Tela.setHora3(""+(long)horas2);
-                
-                horas2 = horas2 * 3600000; // converte para hora;
+                String seg = (String) segundos.getValue().toString();
                
-                int seg2 = Integer.parseInt(seg);
-                    Tela.setSegundos3(""+seg2);
-                    seg2 = seg2 * 1000;
-                
-                // por minuto
-                int minu = Integer.parseInt(min);   //valor digitado
-                Tela.setMinutos3(""+minu);
-                minu = (minu*1000) * 60; //converte para minuto;      
-                if(horas2 == 0){
-                    try {
-                        //espera até chegar o minuto
-                        new Thread().sleep(minu);
-                        new Thread().sleep(seg2);
- 
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }if(horas2 != 0){
-                    //espera até chegar a hora
-                    try {
-                        new Thread().sleep((long) horas2);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    //espera até chegar o minuto
-                    try {
-                        new Thread().sleep(minu);
-                        
-                        System.out.println("minutor" + minu);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                if(horas2==0 && minu ==0){
-                    try {
-                        new Thread().sleep(seg2/2);// divide por 2 por causa do calculo lá em cima
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                int horas  = Integer.parseInt(hor);
+                int minutos = Integer.parseInt(min);
+                int segs   = Integer.parseInt(seg);
+              
+                long tempoTotalMs = (horas * 3600000L) + (minutos * 60000L) + (segs * 1000L);
 
+                if (tempoTotalMs == 0) {
+                    return;
+                }
+                long tempoRestante = tempoTotalMs;
+                
+                while (tempoRestante > 0 && !cancelado) {
+                    long sleepTime = Math.min(1000, tempoRestante);
+                    try {
+                        Thread.sleep(sleepTime);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
+                    tempoRestante -= sleepTime;
+                }
+                if (cancelado) {
+                    System.out.println("Ação cancelada pelo usuário.");
+                    return;
+                }
+                
                 try {
                     if(jComboFuncao.getSelectedItem() == "Desligar"){
                         System.out.println("desligar");
@@ -390,31 +375,28 @@ public class Tela extends javax.swing.JFrame implements Runnable{
                 } catch (IOException ex) {
                     Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
                 }
- 
-                LocalDateTime localDateTime = LocalDateTime.now();
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
-                String dateTime = dtf.format(localDateTime);
-                System.out.println(dateTime);
- 
+
                 try{
-                    FileWriter fw = new FileWriter("desligado.txt", true);
-                    PrintWriter pw = new PrintWriter(fw);
-                    pw.println("Desligado as: " + dateTime);
-                    pw.flush();
-                    pw.close();
-                    fw.close();
+                    LocalDateTime localDateTime = LocalDateTime.now();
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
+                    String dateTime = dtf.format(localDateTime);
+
+                    try(FileWriter fw = new FileWriter("desligado.txt", true);
+                        PrintWriter pw = new PrintWriter(fw)) {
+                        pw.println("Desligado as: " + dateTime);
+                    }
                 }catch(Exception e){
-                    System.out.println("erro!\n");
+                    System.out.println("erro ao escrever log!\n");
                 }
+
+
             }
         });
         acao.setDaemon(true);
         acao.start();
-      
-       
         t.start();
         
-        }
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jComboFuncaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboFuncaoActionPerformed
@@ -422,13 +404,25 @@ public class Tela extends javax.swing.JFrame implements Runnable{
     }//GEN-LAST:event_jComboFuncaoActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        t.stop();
-        acao.stop();
+        cancelado = true;
+        try {
+            Runtime.getRuntime().exec("shutdown -a");
+            System.out.println("Shutdown abortado com sucesso");
+        } catch (IOException ex) {
+            System.out.println("Não foi possível abortar o shutdown");
+        }
+        
+        if (acao != null && acao.isAlive()) {
+            acao.interrupt();
+        }
+        if (t != null && t.isAlive()) {
+            t.interrupt();
+        }
+        
         this.dispose();
         Tela tel = new Tela();
         tel.setVisible(true);
-        
-        
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     public static void main(String args[]) {
@@ -512,6 +506,9 @@ public class Tela extends javax.swing.JFrame implements Runnable{
         int i = 1; //segundos
         int m = 1; // minutos
         int h =1; //hora
+        
+        
+        
         while(true){
           
               try { 
