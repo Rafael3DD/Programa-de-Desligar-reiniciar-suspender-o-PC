@@ -360,17 +360,23 @@ public class Tela extends javax.swing.JFrame implements Runnable{
                 }
                 
                 try {
+                    String comando = "";
                     if(jComboFuncao.getSelectedItem() == "Desligar"){
-                        System.out.println("desligar");
-                        Runtime.getRuntime().exec("shutdown -s -t 5");
+                        comando = "desligar";
+                        Runtime.getRuntime().exec("shutdown -s -f -t 3");
      
-                    }if(jComboFuncao.getSelectedItem() == "Reiniciar"){
-                        System.out.println(" Reiniciar");
-                        Runtime.getRuntime().exec("shutdown -r -t 5");
+                    }else if(jComboFuncao.getSelectedItem() == "Reiniciar"){
+                        comando = " Reiniciar";
+                        Runtime.getRuntime().exec("shutdown -r -f -t 3");
                         
-                    }if (jComboFuncao.getSelectedItem() == "Suspender"){
-                         System.out.println(" Suspender");
-                          Runtime.getRuntime().exec("shutdown -h -t 5");
+                    }else if (jComboFuncao.getSelectedItem() == "Suspender"){
+                        comando =" Suspender";
+                        Runtime.getRuntime().exec("rundll32.exe powrprof.dll,SetSuspendState 0,1,0");
+                    }
+                    
+                    if (!comando.isEmpty()) {
+                        Runtime.getRuntime().exec(comando);
+                        comando = "Comando executado: " + comando;
                     }
                 } catch (IOException ex) {
                     Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
