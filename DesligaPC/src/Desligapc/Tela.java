@@ -31,6 +31,7 @@ public class Tela extends javax.swing.JFrame implements Runnable{
     Thread t = new Thread(this);
     Thread acao;
     private volatile boolean cancelado = false;
+    private volatile boolean emAndamento = false;
     private static String hora3;
     private static String minutos3;
     private static String segundos3;
@@ -94,6 +95,7 @@ public class Tela extends javax.swing.JFrame implements Runnable{
         jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Desligapc/icon.png"))); // NOI18N
         jLabel1.setText("Desligar");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -299,52 +301,48 @@ public class Tela extends javax.swing.JFrame implements Runnable{
 
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       
         hora.setEnabled(false);
         minuto.setEnabled(false);
         segundos.setEnabled(false);
         jComboFuncao.setEnabled(false);
         jButton2.setEnabled(false);
         jButton3.setEnabled(true);
-        
+
         int horr = Integer.parseInt(hora.getValue().toString());
         int minn = Integer.parseInt(minuto.getValue().toString());
         int segg = Integer.parseInt(segundos.getValue().toString());
-        
-        
-        if(horr ==0 && segg == 0 && minn == 0){
+
+        if (horr == 0 && minn == 0 && segg == 0) {
             jButton2.setEnabled(true);
             return;
         }
-            
+
         cancelado = false;
-        
+        emAndamento = true;
+
         acao = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                   robot = new Robot();
+                    robot = new Robot();
                 } catch (AWTException e) {
-                   e.printStackTrace();
+                    e.printStackTrace();
                 }
-                
-                TimeZone.setDefault(TimeZone.getTimeZone("GMT-03:00"));
-                String hor = (String) hora.getValue().toString();
-                String min = (String) minuto.getValue().toString();
-                String seg = (String) segundos.getValue().toString();
-               
-                int horas  = Integer.parseInt(hor);
-                int minutos = Integer.parseInt(min);
-                int segs   = Integer.parseInt(seg);
-              
+
+                int horas = Integer.parseInt(hora.getValue().toString());
+                int minutos = Integer.parseInt(minuto.getValue().toString());
+                int segs = Integer.parseInt(segundos.getValue().toString());
+
                 long tempoTotalMs = (horas * 3600000L) + (minutos * 60000L) + (segs * 1000L);
 
                 if (tempoTotalMs == 0) {
+                    emAndamento = false;
                     return;
                 }
+
                 long tempoRestante = tempoTotalMs;
-                
-                while (tempoRestante > 0 && !cancelado) {
+
+                while (tempoRestante > 0 && !cancelado && emAndamento) {
                     long sleepTime = Math.min(1000, tempoRestante);
                     try {
                         Thread.sleep(sleepTime);
@@ -354,54 +352,45 @@ public class Tela extends javax.swing.JFrame implements Runnable{
                     }
                     tempoRestante -= sleepTime;
                 }
-                if (cancelado) {
-                    System.out.println("Ação cancelada pelo usuário.");
+
+                if (cancelado || !emAndamento) {
+                    emAndamento = false;
                     return;
                 }
-                
+
+                // Executa a ação
                 try {
-                    String comando = "";
-                    if(jComboFuncao.getSelectedItem() == "Desligar"){
-                        comando = "desligar";
+                    if (jComboFuncao.getSelectedItem() == "Desligar") {
                         Runtime.getRuntime().exec("shutdown -s -f -t 3");
-     
-                    }else if(jComboFuncao.getSelectedItem() == "Reiniciar"){
-                        comando = " Reiniciar";
+                    } else if (jComboFuncao.getSelectedItem() == "Reiniciar") {
                         Runtime.getRuntime().exec("shutdown -r -f -t 3");
-                        
-                    }else if (jComboFuncao.getSelectedItem() == "Suspender"){
-                        comando =" Suspender";
+                    } else if (jComboFuncao.getSelectedItem() == "Suspender") {
                         Runtime.getRuntime().exec("rundll32.exe powrprof.dll,SetSuspendState 0,1,0");
-                    }
-                    
-                    if (!comando.isEmpty()) {
-                        Runtime.getRuntime().exec(comando);
-                        comando = "Comando executado: " + comando;
                     }
                 } catch (IOException ex) {
                     Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                try{
+                // Log
+                try {
                     LocalDateTime localDateTime = LocalDateTime.now();
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
                     String dateTime = dtf.format(localDateTime);
-
-                    try(FileWriter fw = new FileWriter("desligado.txt", true);
-                        PrintWriter pw = new PrintWriter(fw)) {
+                    try (FileWriter fw = new FileWriter("desligado.txt", true);
+                         PrintWriter pw = new PrintWriter(fw)) {
                         pw.println("Desligado as: " + dateTime);
                     }
-                }catch(Exception e){
+                } catch (Exception e) {
                     System.out.println("erro ao escrever log!\n");
                 }
 
-
+                emAndamento = false;
             }
         });
+
         acao.setDaemon(true);
         acao.start();
         t.start();
-        
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -411,11 +400,12 @@ public class Tela extends javax.swing.JFrame implements Runnable{
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         cancelado = true;
+        emAndamento = false;
         try {
             Runtime.getRuntime().exec("shutdown -a");
-            System.out.println("Shutdown abortado com sucesso");
+           
         } catch (IOException ex) {
-            System.out.println("Não foi possível abortar o shutdown");
+           
         }
         
         if (acao != null && acao.isAlive()) {
@@ -425,6 +415,12 @@ public class Tela extends javax.swing.JFrame implements Runnable{
             t.interrupt();
         }
         
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            // ignorado
+        }
+
         this.dispose();
         Tela tel = new Tela();
         tel.setVisible(true);
@@ -509,43 +505,57 @@ public class Tela extends javax.swing.JFrame implements Runnable{
 
     @Override
     public void run() {
-        int i = 1; //segundos
-        int m = 1; // minutos
-        int h =1; //hora
+        int i = 0; // segundos
+        int m = 0; // minutos
+        int h = 0; // horas
         
-        
-        
-        while(true){
-          
-              try { 
-                  Thread.sleep (1000);
-              }catch (InterruptedException ex) {
-              }  
-                if(i<10){
-                    jLabesegundos.setText("0"+Integer.toString(i));
-                }else
-                    jLabesegundos.setText(Integer.toString(i)); // segundos
-                    //System.out.println(i);
-                    i++;    
-                if(i ==60){
-                    if(m <10){
-                        jLabelminuto.setText("0"+Integer.toString(m));
-                    }else
-                        jLabelminuto.setText(Integer.toString(m)); //minutos                
-                    i=0;
-                    m += 1;
-                 if(m ==60){
-                     jLabelhora.setText(Integer.toString(h)); // hora
-                     m =0;
-                     h += 1;   
-                 }
-                 if( h == 24){
-                     h=0;
-                 }
-               }
-               
+        jLabesegundos.setText("00");
+        jLabelminuto.setText("00");
+        jLabelhora.setText("0");
+
+        while (emAndamento && !cancelado) {
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+
+            i++;
+
+            // Atualiza segundos
+            if (i < 10) {
+                jLabesegundos.setText("0" + i);
+            } else {
+                jLabesegundos.setText(String.valueOf(i));
+            }
+
+            if (i == 60) {
+                i = 0;
+                m++;
+
+                // Atualiza minutos
+                if (m < 10) {
+                    jLabelminuto.setText("0" + m);
+                } else {
+                    jLabelminuto.setText(String.valueOf(m));
+                }
+
+                if (m == 60) {
+                    m = 0;
+                    h++;
+
+                    // Atualiza horas
+                    jLabelhora.setText(String.valueOf(h));
+
+                    if (h == 24) {
+                        h = 0;
+                    }
+                }
+            }
         }
-    }
+}
 
     //insere icone
     private void setIcon() {

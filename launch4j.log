@@ -1,0 +1,54 @@
+
+
+Version:	3.50
+CmdLine:	C:\Users\rafac\Documents\Programas Java\Programa-de-Desligar-reiniciar-suspender-o-PC\DesligaPC.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	C:\Users\rafac\Documents\Programas Java\Programa-de-Desligar-reiniciar-suspender-o-PC\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	
+Java max ver:	
+Substitute:	JAVA_HOME = 
+Substitute:	PATH = C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Users\rafac\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\Calibre2\;C:\Program Files (x86)\sqlite3;C:\Program Files\dotnet\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Users\rafac\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\rafac\AppData\Local\Programs\Python\Python313\;C:\Users\rafac\AppData\Local\Programs\Python\Launcher\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\rafac\AppData\Local\Microsoft\WindowsApps;C:\Users\rafac\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\MongoDB\mongosh-2.4.2-win32-x64\bin;C:\Program Files\MongoDB\Server\8.0\bin;C:\Program Files\MongoDB\mongodb-database-tools-windows-x86_64-100.11.0\bin;C:\Users\rafac\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\PHP;C:\MinGW\bin;I:\ADB SDK\platform-tools;C:\Users\rafac\.dotnet\tools;C:\Users\rafac\AppData\Roaming\npm;C:\Program Files\Java\jdk-26\bin;;C:\Program Files\Java\jdk-26\bin
+JRE paths:	;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Users\rafac\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\Calibre2\;C:\Program Files (x86)\sqlite3;C:\Program Files\dotnet\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Users\rafac\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\rafac\AppData\Local\Programs\Python\Python313\;C:\Users\rafac\AppData\Local\Programs\Python\Launcher\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\rafac\AppData\Local\Microsoft\WindowsApps;C:\Users\rafac\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\MongoDB\mongosh-2.4.2-win32-x64\bin;C:\Program Files\MongoDB\Server\8.0\bin;C:\Program Files\MongoDB\mongodb-database-tools-windows-x86_64-100.11.0\bin;C:\Users\rafac\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\PHP;C:\MinGW\bin;I:\ADB SDK\platform-tools;C:\Users\rafac\.dotnet\tools;C:\Users\rafac\AppData\Roaming\npm;C:\Program Files\Java\jdk-26\bin;;C:\Program Files\Java\jdk-26\bin
+Check launcher:	C:\Program Files\Common Files\Oracle\Java\javapath\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files (x86)\Common Files\Oracle\Java\java8path\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files (x86)\Common Files\Oracle\Java\javapath\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\system32\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\Wbem\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\WindowsPowerShell\v1.0\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\OpenSSH\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common\bin\javaw.exe (not found)
+Check launcher:	C:\Users\rafac\AppData\Roaming\nvm\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\nodejs\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Calibre2\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files (x86)\sqlite3\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\dotnet\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Docker\Docker\resources\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Git\cmd\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\nodejs\bin\javaw.exe (not found)
+Check launcher:	C:\Users\rafac\AppData\Local\Programs\Python\Python313\Scripts\bin\javaw.exe (not found)
+Check launcher:	C:\Users\rafac\AppData\Local\Programs\Python\Python313\bin\javaw.exe (not found)
+Check launcher:	C:\Users\rafac\AppData\Local\Programs\Python\Launcher\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\MySQL\MySQL Shell 8.0\bin\bin\javaw.exe (not found)
+Check launcher:	C:\Users\rafac\AppData\Local\Microsoft\WindowsApps\bin\javaw.exe (not found)
+Check launcher:	C:\Users\rafac\AppData\Local\Programs\Microsoft VS Code\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\MongoDB\mongosh-2.4.2-win32-x64\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\MongoDB\Server\8.0\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\MongoDB\mongodb-database-tools-windows-x86_64-100.11.0\bin\javaw.exe (not found)
+Check launcher:	C:\Users\rafac\AppData\Roaming\nvm\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\nodejs\bin\javaw.exe (not found)
+Check launcher:	C:\PHP\bin\javaw.exe (not found)
+Check launcher:	C:\MinGW\bin\javaw.exe (not found)
+Check launcher:	I:\ADB SDK\platform-tools\bin\javaw.exe (not found)
+Check launcher:	C:\Users\rafac\.dotnet\tools\bin\javaw.exe (not found)
+Check launcher:	C:\Users\rafac\AppData\Roaming\npm\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Java\jdk-26\bin\javaw.exe (OK)
+Version string: 1.026.000 / 64-Bit (OK)
+Launcher:	C:\Program Files\Java\jdk-26\bin\javaw.exe
+Launcher args:	-jar "C:\Users\rafac\Documents\Programas Java\Programa-de-Desligar-reiniciar-suspender-o-PC\DesligaPC.exe"
+Args length:	106/32768 chars
+Exit code:	0
